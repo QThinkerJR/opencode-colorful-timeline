@@ -1,0 +1,35 @@
+{
+  "name": "opencode-colorful-timeline",
+  "version": "0.1.0",
+  "description": "An OpenCode Desktop plugin that brings the TUI's colorful Markdown styling to the GUI conversation timeline via a single scoped stylesheet.",
+  "license": "MIT",
+  "author": "QThinkerJR",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QThinkerJR/opencode-colorful-timeline.git"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "opencode-gui",
+    "markdown",
+    "timeline"
+  ],
+  "type": "module",
+  "exports": {
+    "./gui-experimental": "./dist/gui-experimental.cjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch"
+  },
+  "devDependencies": {
+    "@opencode/plugin": "^2.3.0",
+    "solid-js": "^1.9.0",
+    "vite": "^7.0.0",
+    "vite-plugin-solid": "^2.11.0"
+  }
+}

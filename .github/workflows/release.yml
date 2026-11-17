@@ -1,0 +1,67 @@
+name: Release
+
+# Publish to npm when a GitHub Release is published.
+# Authentication uses npm Trusted Publishing (OIDC): no NPM_TOKEN secret is
+# needed, but the package must be registered on npmjs.com with this exact
+# workflow file name (see "Trusted Publisher" in the package settings).
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for OIDC: lets npm verify that this workflow is the
+      # registered trusted publisher.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      # Trusted Publishing requires npm >= 11.5.1; the Node 24 runner image
+      # may ship an older npm, so upgrade explicitly.
+      - name: Upgrade npm
+        run: npm install -g npm@latest
+
+      - name: Verify tag matches package.json version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Tag v$TAG_VERSION does not match package.json version $PKG_VERSION"
+            exit 1
+          fi
+
+      # Skip cleanly when this version is already on npm (e.g. the first
+      # release was bootstrapped by a local `npm publish`).
+      - name: Check whether version is already published
+        id: published
+        run: |
+          NAME="$(node -p "require('./package.json').name")"
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Version $NAME@$VERSION is already published, skipping."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install dependencies
+        if: steps.published.outputs.skip != 'true'
+        run: npm ci
+
+      - name: Build
+        if: steps.published.outputs.skip != 'true'
+        run: npm run build
+
+      - name: Publish
+        if: steps.published.outputs.skip != 'true'
+        run: npm publish --provenance --access public

@@ -1,0 +1,37 @@
+/*
+ * TUI-like colors for Markdown in the conversation area.
+ *
+ * Every selector mirrors the specificity of the app's own rule (one attribute
+ * selector plus one element), so it wins by load order only. That keeps the
+ * deliberately muted variants untouched: reasoning parts, tool output, and
+ * path inline code still override these colors with their own two-attribute
+ * selectors.
+ *
+ * Colors are the built-in app theme's `markdown-*` values, the same tokens the
+ * TUI renders Markdown with: light first, dark second.
+ */
+
+[data-component="markdown"] :is(h1, h2, h3, h4, h5, h6) {
+  color: light-dark(#d68c27, #9d7cd8);
+}
+
+[data-component="markdown"] :is(strong, b) {
+  color: light-dark(#d68c27, #f5a742);
+}
+
+[data-component="markdown"] em {
+  color: light-dark(#b0851f, #e5c07b);
+}
+
+[data-component="markdown"] blockquote {
+  color: light-dark(#b0851f, #e5c07b);
+}
+
+[data-component="markdown"] li::marker {
+  color: light-dark(#318795, #56b6c2);
+}
+
+[data-component="markdown"] :not(pre) > code {
+  color: light-dark(#3d9a57, #7fd88f);
+  background: color-mix(in oklch, currentColor 8%, transparent);
+}

@@ -21,14 +21,14 @@ Add the package to the global `~/.config/opencode/opencode.json(c)`:
 
 ```jsonc
 {
-  "plugins": ["opencode-colorful-timeline"],
+  "plugins": ["@qthinker/opencode-colorful-timeline"],
 }
 ```
 
 Or install it directly:
 
 ```sh
-opencode plugin add opencode-colorful-timeline
+opencode plugin add @qthinker/opencode-colorful-timeline
 ```
 
 A rebuild reloads the GUI part in every window; the server part does not

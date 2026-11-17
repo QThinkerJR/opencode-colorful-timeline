@@ -20,14 +20,14 @@ Markdown 呈现与 TUI 一致的配色。
 
 ```jsonc
 {
-  "plugins": ["opencode-colorful-timeline"],
+  "plugins": ["@qthinker/opencode-colorful-timeline"],
 }
 ```
 
 也可以直接安装：
 
 ```sh
-opencode plugin add opencode-colorful-timeline
+opencode plugin add @qthinker/opencode-colorful-timeline
 ```
 
 重新构建后，GUI 部分会在每个窗口自动重载；本插件没有服务端部分，其余组件
